@@ -1,0 +1,72 @@
+{
+  "0": {
+    "name": "Excalibur",
+    "category": "Weapon",
+    "type": "Sword",
+    "bodySlot": "Hand",
+    "rarity": "legendary",
+    "price": 5000,
+    "icon": "sword_excalibur",
+    "description": "A magical sword of utmost power."
+  },
+  "1": {
+    "name": "Rusty Polearm",
+    "category": "Weapon",
+    "type": "Polearm",
+    "bodySlot": "Hand",
+    "rarity": "common",
+    "price": 25,
+    "icon": "polearm_generic",
+    "description": "A blunt iron-piece attached to some wood."
+  },
+  "2": {
+    "name": "Oak Shortbow",
+    "category": "Weapon",
+    "type": "Bow",
+    "bodySlot": "Hand",
+    "rarity": "uncommon",
+    "price": 100,
+    "icon": "bow_generic",
+    "description": "A quick shooting bow, arrows not included."
+  },
+  "3": {
+    "name": "Ruby Staff of Fire",
+    "category": "Weapon",
+    "type": "Staff",
+    "bodySlot": "Hand",
+    "rarity": "rare",
+    "price": 250,
+    "icon": "staff_ruby",
+    "description": "A mage's weapon with a crimson stone."
+  },
+  "4": {
+    "name": "Pearl Chainmail",
+    "category": "Armour",
+    "type": "Melee",
+    "bodySlot": "Top",
+    "rarity": "very rare",
+    "price": 500,
+    "icon": "chainmail_generic",
+    "description": "A light-armour for melee combat, white as pearls."
+  },
+  "5": {
+    "name": "Dragon Leatherbody",
+    "category": "Armour",
+    "type": "Ranged",
+    "bodySlot": "Top",
+    "rarity": "very rare",
+    "price": 665,
+    "icon": "leatherbody_generic",
+    "description": "A light-weight armour, made out of dragonhide."
+  },
+  "6": {
+    "name": "Sage's Robe",
+    "category": "Armour",
+    "type": "Mage",
+    "bodySlot": "Top",
+    "rarity": "common",
+    "price": 60,
+    "icon": "robe_generic",
+    "description": "A robetop used by mages."
+  }
+}
