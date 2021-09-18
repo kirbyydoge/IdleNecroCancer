@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopMenu: {fileID: 1601307589}
-  itemList: {fileID: 4900000, guid: 6292925cdce0bfc4192dc0e3bba36200, type: 3}
+  itemListJSON: {fileID: 4900000, guid: 6292925cdce0bfc4192dc0e3bba36200, type: 3}
 --- !u!4 &926537452
 Transform:
   m_ObjectHideFlags: 0

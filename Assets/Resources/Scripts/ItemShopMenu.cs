@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ItemShopMenu : MonoBehaviour
 {
     public Transform ShopMenu;
-    public Item ItemList;
+    public ItemList listOfItems;
 
 
     // Start is called before the first frame update
@@ -83,16 +83,19 @@ public class ItemShopMenu : MonoBehaviour
 
 
     [SerializeField]
-    private TextAsset itemList = null;
+    private TextAsset itemListJSON = null;
 
     public void LoadShopMenuList()
     {
-        if (itemList != null)
+        if (itemListJSON != null)
         {
-            string dataAsJSON = itemList.text;
-            // print(dataAsJSON);
-            ItemList = JsonUtility.FromJson<Item>(dataAsJSON);
-            print(ItemList); // FIXME: how to get data from this?
+            print(itemListJSON);
+            string dataAsJSON = itemListJSON.text;
+            print(dataAsJSON);
+            listOfItems = JsonUtility.FromJson<ItemList>(dataAsJSON);
+            //print(listOfItems["0"]);
+            print(listOfItems);
+            //print(listOfItems[0]);
         }
         else
         {
@@ -102,9 +105,14 @@ public class ItemShopMenu : MonoBehaviour
 
 }
 
+public class ItemList
+{
+    public int id;
+    public Item[] items;
+}
+
 public class Item
 {
-    private int id;
     private string name;
     private string category;
     private string type;
