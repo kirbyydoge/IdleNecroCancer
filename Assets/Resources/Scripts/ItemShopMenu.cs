@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ItemShopMenu : MonoBehaviour
 {
-    public Transform ShopMenu;
+    public Transform CategoryPanel;
     public Transform SubShopPanel;
     public Transform SubShopPanelContent;
     public Transform SingleItemPanel;
@@ -25,7 +25,7 @@ public class ItemShopMenu : MonoBehaviour
 
     private void InitShop()
     {
-        if(ShopMenu == null)
+        if(CategoryPanel == null)
         {
             Debug.Log("No choices selected");
         }
@@ -34,7 +34,7 @@ public class ItemShopMenu : MonoBehaviour
 
         // Find all children buttons of main shop and add onClick
         int i = 0;
-        foreach (Transform trans in ShopMenu)
+        foreach (Transform trans in CategoryPanel)
         {
             int currentIndex = i;
 
@@ -86,7 +86,7 @@ public class ItemShopMenu : MonoBehaviour
 
     public void LoadSubShopPanel(string category)
     {
-        hideAllElements();
+        HideAllElements();
         SubShopPanel.gameObject.SetActive(true);
         
         // Destroy all previously created buttons except for tempButton
@@ -123,11 +123,11 @@ public class ItemShopMenu : MonoBehaviour
 
         // Create an image for that button
         GameObject uiImage = DefaultControls.CreateImage(uiResources);
-        uiImage.GetComponent<Image>().sprite = getItemIcon(icon);
+        uiImage.GetComponent<Image>().sprite = GetItemIcon(icon);
         uiImage.transform.SetParent(uiButton.transform, false);
     }
 
-    public Sprite getItemIcon(string iconName)
+    public Sprite GetItemIcon(string iconName)
     {
         Texture2D tex = null;
         Sprite sp = null;
@@ -148,24 +148,24 @@ public class ItemShopMenu : MonoBehaviour
         return sp;
     }
 
-    public void tempHideSubMenu()
+    public void TempHideSubMenu()
     {
-        hideAllElements();
+        HideAllElements();
         SubShopPanel.gameObject.SetActive(false);
-        ShopMenu.gameObject.SetActive(true);
+        CategoryPanel.gameObject.SetActive(true);
 
     }
 
-    public void hideSingleItemMenu()
+    public void HideSingleItemMenu()
     {
-        hideAllElements();
+        HideAllElements();
         SingleItemPanel.gameObject.SetActive(false);
         SubShopPanel.gameObject.SetActive(true);
     }
 
-    public void hideAllElements()
+    public void HideAllElements()
     {
-        ShopMenu.gameObject.SetActive(false);
+        CategoryPanel.gameObject.SetActive(false);
         SubShopPanel.gameObject.SetActive(false);
         SingleItemPanel.gameObject.SetActive(false);
     }
@@ -180,20 +180,22 @@ public class ItemShopMenu : MonoBehaviour
 
     public void DisplaySingleItemPage(int id)
     {
-        hideAllElements();
+        HideAllElements();
         SingleItemPanel.gameObject.SetActive(true);
 
         Item selectedItem = listOfItems.items[id];
-        SingleItemPanel.gameObject.transform.Find("Icon").GetComponent<Image>().sprite = getItemIcon(selectedItem.icon);
+        SingleItemPanel.gameObject.transform.Find("Icon").GetComponent<Image>().sprite = GetItemIcon(selectedItem.icon);
         SingleItemPanel.gameObject.transform.Find("Name").GetComponent<Text>().text = selectedItem.name;
-        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().text = selectedItem.rarity + " " + selectedItem.type;
-        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = getRarityColour(selectedItem.rarity);
+        // append armour if armour, TODO: likely have a different type for armour rather than melee/ranged/mage?
+        string desc = selectedItem.rarity + " " + selectedItem.type.ToLower() + (selectedItem.category == "Armour" ? " armour" : "");
+        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().text = desc;
+        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = GetRarityColour(selectedItem.rarity);
         SingleItemPanel.gameObject.transform.Find("Description").GetComponent<Text>().text = selectedItem.description;
         SingleItemPanel.gameObject.transform.Find("Price").GetComponent<Text>().text = selectedItem.price.ToString();
         SingleItemPanel.gameObject.transform.Find("ID").GetComponent<Text>().text = selectedItem.id.ToString(); // purchase button will pull from this for the selected page, ugly
     }
 
-    public Color getRarityColour(string rarity)
+    public Color GetRarityColour(string rarity)
     {
         Color itemColour = Color.white;
         switch (rarity)
@@ -217,11 +219,6 @@ public class ItemShopMenu : MonoBehaviour
                 break;
         }
         return itemColour;
-    }
-
-    private void populateItemList() // temporary function to fill the shop item list
-    {
-
     }
 
 
