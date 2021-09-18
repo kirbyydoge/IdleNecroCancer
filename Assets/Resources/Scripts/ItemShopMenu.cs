@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class ItemShopMenu : MonoBehaviour
 {
     public Transform ShopMenu;
-    public ItemList listOfItems;
     public Transform SubShopPanel;
     public Transform SubShopPanelContent;
+    public Transform SingleItemPanel;
+
+    public ItemList listOfItems;
     public Sprite buttonBg;
 
 
@@ -32,12 +34,12 @@ public class ItemShopMenu : MonoBehaviour
 
         // Find all children buttons of main shop and add onClick
         int i = 0;
-        foreach (Transform t in ShopMenu)
+        foreach (Transform trans in ShopMenu)
         {
             int currentIndex = i;
 
-            Button b = t.GetComponent<Button>();
-            b.onClick.AddListener(() => OnShopLabelSelect(currentIndex));
+            Button butt = trans.GetComponent<Button>();
+            butt.onClick.AddListener(() => OnShopLabelSelect(currentIndex));
 
             i++;
 
@@ -84,6 +86,7 @@ public class ItemShopMenu : MonoBehaviour
 
     public void LoadSubShopPanel(string category)
     {
+        hideAllElements();
         SubShopPanel.gameObject.SetActive(true);
         
         // Destroy all previously created buttons except for tempButton
@@ -100,13 +103,13 @@ public class ItemShopMenu : MonoBehaviour
         {
             if (item.category == category)
             {
-                CreateButton(item.name, item.icon);
+                CreateButton(item.name, item.icon, item.id);
             }
         }
 
     }
 
-    public void CreateButton(string text, string icon)
+    public void CreateButton(string text, string icon, int id)
     {
         DefaultControls.Resources uiResources = new DefaultControls.Resources();
         uiResources.standard = buttonBg;
@@ -115,6 +118,8 @@ public class ItemShopMenu : MonoBehaviour
         GameObject uiButton = DefaultControls.CreateButton(uiResources);
         uiButton.transform.SetParent(SubShopPanelContent.transform, false);
         uiButton.GetComponentInChildren<Text>().text = text;
+
+        uiButton.GetComponent<Button>().onClick.AddListener(() => DisplaySingleItemPage(id));
 
         // Create an image for that button
         GameObject uiImage = DefaultControls.CreateImage(uiResources);
@@ -145,12 +150,69 @@ public class ItemShopMenu : MonoBehaviour
 
     public void tempHideSubMenu()
     {
+        hideAllElements();
         SubShopPanel.gameObject.SetActive(false);
+        ShopMenu.gameObject.SetActive(true);
+
+    }
+
+    public void hideSingleItemMenu()
+    {
+        hideAllElements();
+        SingleItemPanel.gameObject.SetActive(false);
+        SubShopPanel.gameObject.SetActive(true);
+    }
+
+    public void hideAllElements()
+    {
+        ShopMenu.gameObject.SetActive(false);
+        SubShopPanel.gameObject.SetActive(false);
+        SingleItemPanel.gameObject.SetActive(false);
     }
 
     public void OnBuyButtonClick()
     {
         print("Buy button clicked.");
+    }
+
+    public void DisplaySingleItemPage(int id)
+    {
+        hideAllElements();
+        SingleItemPanel.gameObject.SetActive(true);
+
+        Item selectedItem = listOfItems.items[id];
+        SingleItemPanel.gameObject.transform.Find("Icon").GetComponent<Image>().sprite = getItemIcon(selectedItem.icon);
+        SingleItemPanel.gameObject.transform.Find("Name").GetComponent<Text>().text = selectedItem.name;
+        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().text = selectedItem.rarity + " " + selectedItem.type;
+        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = getRarityColour(selectedItem.rarity);
+        SingleItemPanel.gameObject.transform.Find("Description").GetComponent<Text>().text = selectedItem.description;
+        SingleItemPanel.gameObject.transform.Find("Price").GetComponent<Text>().text = selectedItem.price.ToString();
+    }
+
+    public Color getRarityColour(string rarity)
+    {
+        Color itemColour = Color.white;
+        switch (rarity)
+        {
+            case "common":
+                itemColour = Color.white;
+                break;
+            case "uncommon":
+                itemColour = Color.blue;
+                break;
+            case "rare":
+                itemColour = Color.yellow;
+                break;
+            case "very rare":
+                itemColour = Color.green;
+                break;
+            case "legendary":
+                itemColour = new Color(1F, 0.647F, 0.0F); // orange
+                break;
+            default:
+                break;
+        }
+        return itemColour;
     }
 
     private void populateItemList() // temporary function to fill the shop item list
