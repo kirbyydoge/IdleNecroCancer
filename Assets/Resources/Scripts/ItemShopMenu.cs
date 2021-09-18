@@ -173,6 +173,9 @@ public class ItemShopMenu : MonoBehaviour
     public void OnBuyButtonClick()
     {
         print("Buy button clicked.");
+        // pull the id of selected item from the invisible id text on single item page
+        Item selectedItem = listOfItems.items[int.Parse(SingleItemPanel.gameObject.transform.Find("ID").GetComponent<Text>().text)];
+        print("Selected item name, price, id:" + selectedItem.name + "," + selectedItem.price.ToString() + "," + selectedItem.id.ToString());
     }
 
     public void DisplaySingleItemPage(int id)
@@ -187,6 +190,7 @@ public class ItemShopMenu : MonoBehaviour
         SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = getRarityColour(selectedItem.rarity);
         SingleItemPanel.gameObject.transform.Find("Description").GetComponent<Text>().text = selectedItem.description;
         SingleItemPanel.gameObject.transform.Find("Price").GetComponent<Text>().text = selectedItem.price.ToString();
+        SingleItemPanel.gameObject.transform.Find("ID").GetComponent<Text>().text = selectedItem.id.ToString(); // purchase button will pull from this for the selected page, ugly
     }
 
     public Color getRarityColour(string rarity)
