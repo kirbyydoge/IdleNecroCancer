@@ -9,6 +9,7 @@ public class ItemShopMenu : MonoBehaviour
     public Transform SubShopPanel;
     public Transform SubShopPanelContent;
     public Transform SingleItemPanel;
+    public Transform DiamondShopPanel;
 
     public ItemList listOfItems;
     public Sprite buttonBg;
@@ -69,8 +70,8 @@ public class ItemShopMenu : MonoBehaviour
                 category = "Armour";
                 break;
             case 3:
-                print("load potions menu");
-                category = "Potion";
+                print("load diamonds menu");
+                category = "Diamond";
                 break;
             case 4:
                 print("load boosters menu");
@@ -84,7 +85,12 @@ public class ItemShopMenu : MonoBehaviour
                 break;
 
         }
-        LoadSubShopPanel(category);
+        if (category == "Diamond")
+        {
+            LoadDiamondShopPage();
+        } else {
+            LoadSubShopPanel(category);
+        }
     }
 
     public void LoadSubShopPanel(string category)
@@ -171,6 +177,7 @@ public class ItemShopMenu : MonoBehaviour
         CategoryPanel.gameObject.SetActive(false);
         SubShopPanel.gameObject.SetActive(false);
         SingleItemPanel.gameObject.SetActive(false);
+        DiamondShopPanel.gameObject.SetActive(false);
     }
 
     public void OnBuyButtonClick()
@@ -207,6 +214,19 @@ public class ItemShopMenu : MonoBehaviour
         rarityColours.Add("legendary", new Color(1F, 0.647F, 0.0F)); // orange
     }
 
+    public void LoadDiamondShopPage()
+    {
+        HideAllElements();
+        DiamondShopPanel.gameObject.SetActive(true);
+
+        // TODO: all other important stuff
+    }
+
+    public void HideDiamondShopPage()
+    {
+        HideAllElements();
+        CategoryPanel.gameObject.SetActive(true);
+    }
 
     [SerializeField]
     private TextAsset itemListJSON = null;
