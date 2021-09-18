@@ -13,6 +13,8 @@ public class ItemShopMenu : MonoBehaviour
     public ItemList listOfItems;
     public Sprite buttonBg;
 
+    public IDictionary<string, Color> rarityColours = new Dictionary<string, Color>();
+
 
     // Start is called before the first frame update
     private void Start()
@@ -31,6 +33,7 @@ public class ItemShopMenu : MonoBehaviour
         }
 
         LoadShopMenuList();
+        InitRarityColoursDictionary();
 
         // Find all children buttons of main shop and add onClick
         int i = 0;
@@ -189,36 +192,19 @@ public class ItemShopMenu : MonoBehaviour
         // append armour if armour, TODO: likely have a different type for armour rather than melee/ranged/mage?
         string desc = selectedItem.rarity + " " + selectedItem.type.ToLower() + (selectedItem.category == "Armour" ? " armour" : "");
         SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().text = desc;
-        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = GetRarityColour(selectedItem.rarity);
+        SingleItemPanel.gameObject.transform.Find("RarityType").GetComponent<Text>().color = rarityColours[selectedItem.rarity];
         SingleItemPanel.gameObject.transform.Find("Description").GetComponent<Text>().text = selectedItem.description;
         SingleItemPanel.gameObject.transform.Find("Price").GetComponent<Text>().text = selectedItem.price.ToString();
         SingleItemPanel.gameObject.transform.Find("ID").GetComponent<Text>().text = selectedItem.id.ToString(); // purchase button will pull from this for the selected page, ugly
     }
 
-    public Color GetRarityColour(string rarity)
+    public void InitRarityColoursDictionary()
     {
-        Color itemColour = Color.white;
-        switch (rarity)
-        {
-            case "common":
-                itemColour = Color.white;
-                break;
-            case "uncommon":
-                itemColour = Color.blue;
-                break;
-            case "rare":
-                itemColour = Color.yellow;
-                break;
-            case "very rare":
-                itemColour = Color.green;
-                break;
-            case "legendary":
-                itemColour = new Color(1F, 0.647F, 0.0F); // orange
-                break;
-            default:
-                break;
-        }
-        return itemColour;
+        rarityColours.Add("common", Color.white);
+        rarityColours.Add("uncommon", Color.blue);
+        rarityColours.Add("rare", Color.yellow);
+        rarityColours.Add("very rare", Color.green);
+        rarityColours.Add("legendary", new Color(1F, 0.647F, 0.0F)); // orange
     }
 
 
