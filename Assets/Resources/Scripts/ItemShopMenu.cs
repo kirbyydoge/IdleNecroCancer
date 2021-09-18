@@ -47,68 +47,105 @@ public class ItemShopMenu : MonoBehaviour
     public void OnShopLabelSelect(int currentIndex)
     {
         print("Selected item: " + currentIndex);
-        string type = "";
+        string category = "";
         
         switch(currentIndex)
         {
             case 0:
                 print("load weapons menu");
-                type = "Weapon";
+                category = "Weapon";
                 break;
             case 1:
                 print("load characters menu");
-                type = "Character";
+                category = "Character";
                 break;
             case 2:
                 print("load armour menu");
-                type = "Armour";
+                category = "Armour";
                 break;
             case 3:
                 print("load potions menu");
-                type = "Potion";
+                category = "Potion";
                 break;
             case 4:
                 print("load boosters menu");
-                type = "Booster";
+                category = "Booster";
                 break;
             case 5:
                 print("load skins menu");
-                type = "Skin";
+                category = "Skin";
                 break;
             default:
                 break;
 
         }
-        LoadSubShopPanel(type);
-
+        LoadSubShopPanel(category);
     }
 
-    public void LoadSubShopPanel(string type)
+    public void LoadSubShopPanel(string category)
     {
         SubShopPanel.gameObject.SetActive(true);
+        
+        // Destroy all previously created buttons except for tempButton
+        foreach (Transform child in SubShopPanelContent.transform)
+        {
+            if (child.gameObject.name != "tempButton")
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
 
-        print(type);
-
+        // Iterate through the items list to create items of the selected category
         foreach (var item in listOfItems.items)
         {
-            print(item.category);
-            if (item.category == type)
+            if (item.category == category)
             {
-                print("match, creating button");
-                CreateButton(item.name);
+                CreateButton(item.name, item.icon);
             }
         }
 
     }
 
-    public void CreateButton(string text)
+    public void CreateButton(string text, string icon)
     {
         DefaultControls.Resources uiResources = new DefaultControls.Resources();
         uiResources.standard = buttonBg;
+
+        // Create a button for SubShopMenu
         GameObject uiButton = DefaultControls.CreateButton(uiResources);
-        
         uiButton.transform.SetParent(SubShopPanelContent.transform, false);
         uiButton.GetComponentInChildren<Text>().text = text;
+
+        // Create an image for that button
+        GameObject uiImage = DefaultControls.CreateImage(uiResources);
+        uiImage.GetComponent<Image>().sprite = getItemIcon(icon);
+        uiImage.transform.SetParent(uiButton.transform, false);
+    }
+
+    public Sprite getItemIcon(string iconName)
+    {
+        Texture2D tex = null;
+        Sprite sp = null;
+        byte[] fileData;
+
+        string iconPath = "Assets\\Resources\\Assets\\Items\\" + iconName + ".png";
+
+        if (System.IO.File.Exists(iconPath))
+        {
+            fileData = System.IO.File.ReadAllBytes(iconPath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+            tex.filterMode = FilterMode.Point; // pixelated graphics for pixel art
+        }
+
+        sp = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+
+        return sp;
+    }
+
+    public void tempHideSubMenu()
+    {
+        SubShopPanel.gameObject.SetActive(false);
     }
 
     public void OnBuyButtonClick()

@@ -1677,6 +1677,7 @@ MonoBehaviour:
   SubShopPanel: {fileID: 1602855963}
   SubShopPanelContent: {fileID: 1156257865}
   buttonBg: {fileID: 21300000, guid: eb1218e76efec7f4286d2236da476d87, type: 3}
+  testItem: {fileID: 21300000, guid: 36a83626c0a516e4295e1574c48c77c1, type: 3}
   itemListJSON: {fileID: 4900000, guid: d40749a0042afbf40970898e87b98118, type: 3}
 --- !u!4 &926537452
 Transform:
@@ -2238,7 +2239,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: tempGoBack
 --- !u!222 &1287741405
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2835,7 +2836,7 @@ GameObject:
   - component: {fileID: 1834617255}
   - component: {fileID: 1834617254}
   m_Layer: 5
-  m_Name: Button
+  m_Name: tempButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2903,7 +2904,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1834617255}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 926537451}
+        m_TargetAssemblyTypeName: ItemShopMenu, Assembly-CSharp
+        m_MethodName: tempHideSubMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1834617255
 MonoBehaviour:
   m_ObjectHideFlags: 0
