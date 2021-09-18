@@ -2,107 +2,110 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour {
+abstract public class Unit : MonoBehaviour {
 
     [Header("Unit Abilities")]
-    protected Ability ability;
+    public Ability ability;
 
     //Unit Stats
+    [Header("Unit Stats")]
     public float maxHP;
-    public float maxMP;
     public float movementSpeed;
-    public float attackSpeed;
-    public float abilityCooldown;
+    public float haste;
+    public float baseAbilityCooldown;
+    public float baseDamage;
+    public float attackRange;
+    public float attackExtension;
 
     //Unit State
     private float currentHP;
     private float currentMP;
+    private bool canAct;
 
     //Team State
     private GameObject[] allies;
     private GameObject[] enemies;
 
-    protected virtual void Start() {
+    //Battle Controllers
+    [Header("Battle Handler")]
+    public GameObject battleHandler;
+    [HideInInspector]
+    public UnitMovementController movementController;
+    [HideInInspector]
+    public UnitBattleController battleController;
+    [HideInInspector]
+    public Animator spriteAnimator;
+
+    protected virtual void Start()
+    {
+        baseAbilityCooldown = 1f;
         currentHP = maxHP;
-        currentMP = maxMP;
-        TeamSetup();
+        canAct = true;
+        movementController = battleHandler.GetComponent<UnitMovementController>();
+        battleController = battleHandler.GetComponent<UnitBattleController>();
+        spriteAnimator = gameObject.GetComponent<Animator>();
         AbilitySetup();
     }
 
-    protected void Update() {
-        TeamSetup();    // Implement better teams later
-        Move();
-        Act();
-    }
+    //Overridable AI methods
+    public abstract void Move(GameObject[] allies, GameObject[] enemies);
 
-    protected virtual void Move() { 
-        
-    }
+    public abstract void Act(GameObject[] allies, GameObject[] enemies);
 
-    protected virtual void Act()
+    public abstract void Attack(GameObject[] allies, GameObject[] enemies);
+
+    public abstract IEnumerator AutoAttack(GameObject enemy);
+
+    public virtual void TakeDamage(float damage)
     {
-        if (ability.IsReady())
-        {
-            ability.Use(gameObject, null, enemies);
-        }
-        else
-        {
-            ability.Tick(Time.deltaTime);
-        }
-    }
-
-    protected virtual void TeamSetup()
-    {
-        GameObject[] heroes = GameObject.FindGameObjectsWithTag("Hero");
-        GameObject[] monsters = GameObject.FindGameObjectsWithTag("Monster");
-        if (gameObject.tag == "Hero")
-        {
-            allies = RemoveSelf(gameObject, heroes);
-            enemies = monsters;
-        }
-        else
-        {
-            allies = RemoveSelf(gameObject, monsters);
-            enemies = heroes;
-        }
-    }
-
-    protected virtual void AbilitySetup() {
-        ability = gameObject.AddComponent<AbilityFireball>();
-        ability.SetCooldown(abilityCooldown);
-    }
-
-
-    public void TakeDamage(float damage) {
         currentHP -= damage;
         currentHP = Mathf.Max(0, currentHP);
-        if (currentHP == 0) {
-            Destroy(gameObject);    
-        }
     }
 
-    public void Heal(float heal) {
+    public virtual void Heal(float heal)
+    {
         currentHP += heal;
         currentHP = Mathf.Max(maxHP, currentHP);
     }
 
+    protected virtual void AbilitySetup()
+    {
+        ability = gameObject.AddComponent<AbilityFireball>();
+        ability.SetCooldown(EffectiveCooldown(baseAbilityCooldown));
+    }
+
+    protected virtual float EffectiveCooldown(float value)
+    {
+        return value * 100 / (haste + 100);
+    }
+
     //Getters Setters
-    public float getCurrentHP() {
+    public float getCurrentHP()
+    {
         return this.currentHP;
     }
 
-    public void setCurrentHP(float value) {
+    public void setCurrentHP(float value)
+    {
         this.currentHP = value;
     }
-    public float getCurrentMP() {
+    public float getCurrentMP()
+    {
         return this.currentMP;
     }
 
-    public void setCurrentMP(float value) {
+    public void setCurrentMP(float value)
+    {
         this.currentMP = value;
     }
 
-    private GameObject[] RemoveSelf(GameObject self, GameObject[] array) {
+    public bool CanAct()
+    {
+        return canAct;
+    }
+
+    private GameObject[] RemoveSelf(GameObject self, GameObject[] array)
+    {
         if (array.Length == 1) {
             return null;
         }

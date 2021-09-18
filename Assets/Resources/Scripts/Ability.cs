@@ -9,11 +9,13 @@ abstract public class Ability : MonoBehaviour {
 
 	abstract public bool Use(GameObject self, GameObject[] allies, GameObject[] enemies);
 
-	public void LateUse() {
+	public void LateUse()
+	{
 		cooldownTimer = cooldown;
 	}
 
-	public void Tick(float deltaTime) {
+	public void Tick(float deltaTime)
+	{
 		if(cooldownTimer > 0) {
 			cooldownTimer -= deltaTime;
 		}
@@ -22,7 +24,8 @@ abstract public class Ability : MonoBehaviour {
 		}
 	}
 
-	public void SetCooldown(float cooldown) {
+	public void SetCooldown(float cooldown)
+	{
 		this.cooldown = cooldown;
 	}
 

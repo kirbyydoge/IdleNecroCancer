@@ -30,7 +30,8 @@ public class FireballAI : MonoBehaviour
             {
                 target.TakeDamage(damage);
             }
-            catch (System.Exception e) { 
+            catch (System.Exception e)
+            { 
                 // Target died.
             }
             Destroy(gameObject);
@@ -38,12 +39,13 @@ public class FireballAI : MonoBehaviour
         gameObject.transform.position = Vector3.MoveTowards(curPos, targetPos, movementSpeed * Time.deltaTime);
     }
 
-    public void skillSetup(float movementSpeed, float damage) {
+    public void SkillSetup(float movementSpeed, float damage)
+    {
         this.movementSpeed = movementSpeed;
         this.damage = damage;
     }
 
-    public void setTarget(GameObject target)
+    public void SetTarget(GameObject target)
     {
         try
         {
@@ -51,7 +53,8 @@ public class FireballAI : MonoBehaviour
             this.targetPos = target.transform.position;
             targetValid = true;
         }
-        catch (System.Exception e) {    // Target already died
+        catch (System.Exception e) // Target already died
+        {    
             Destroy(gameObject);
         }
     }

@@ -9,7 +9,7 @@ public class AbilityFireball : Ability
     private float speed;
     private float damage;
 
-    void Start()
+    void Awake()
     {
         fireballPrefab = (GameObject)Resources.Load("Prefabs/Fireball", typeof(GameObject));
     }
@@ -32,13 +32,14 @@ public class AbilityFireball : Ability
             }
         }
         GameObject fireball = Instantiate(fireballPrefab, self.transform.position, Quaternion.identity);
-        fireball.GetComponent<FireballAI>().skillSetup(speed, damage);
-        fireball.GetComponent<FireballAI>().setTarget(lowerHPUnit);
+        fireball.GetComponent<FireballAI>().SkillSetup(speed, damage);
+        fireball.GetComponent<FireballAI>().SetTarget(lowerHPUnit);
         LateUse();
         return true;
     }
 
-    public void AbilitySetup(float speed, float damage) {
+    public void AbilitySetup(float speed, float damage)
+    {
         this.speed = speed;
         this.damage = damage;
     }
