@@ -7,6 +7,9 @@ public class ItemShopMenu : MonoBehaviour
 {
     public Transform ShopMenu;
     public ItemList listOfItems;
+    public Transform SubShopPanel;
+    public Transform SubShopPanelContent;
+    public Sprite buttonBg;
 
 
     // Start is called before the first frame update
@@ -44,31 +47,68 @@ public class ItemShopMenu : MonoBehaviour
     public void OnShopLabelSelect(int currentIndex)
     {
         print("Selected item: " + currentIndex);
+        string type = "";
         
         switch(currentIndex)
         {
             case 0:
                 print("load weapons menu");
+                type = "Weapon";
                 break;
             case 1:
                 print("load characters menu");
+                type = "Character";
                 break;
             case 2:
                 print("load armour menu");
+                type = "Armour";
                 break;
             case 3:
                 print("load potions menu");
+                type = "Potion";
                 break;
             case 4:
                 print("load boosters menu");
+                type = "Booster";
                 break;
             case 5:
                 print("load skins menu");
+                type = "Skin";
                 break;
             default:
                 break;
 
         }
+        LoadSubShopPanel(type);
+
+    }
+
+    public void LoadSubShopPanel(string type)
+    {
+        SubShopPanel.gameObject.SetActive(true);
+
+        print(type);
+
+        foreach (var item in listOfItems.items)
+        {
+            print(item.category);
+            if (item.category == type)
+            {
+                print("match, creating button");
+                CreateButton(item.name);
+            }
+        }
+
+    }
+
+    public void CreateButton(string text)
+    {
+        DefaultControls.Resources uiResources = new DefaultControls.Resources();
+        uiResources.standard = buttonBg;
+        GameObject uiButton = DefaultControls.CreateButton(uiResources);
+        
+        uiButton.transform.SetParent(SubShopPanelContent.transform, false);
+        uiButton.GetComponentInChildren<Text>().text = text;
     }
 
     public void OnBuyButtonClick()
@@ -83,7 +123,7 @@ public class ItemShopMenu : MonoBehaviour
 
 
     [SerializeField]
-    private TextAsset itemListJSON;
+    private TextAsset itemListJSON = null;
 
     public void LoadShopMenuList()
     {
@@ -91,13 +131,12 @@ public class ItemShopMenu : MonoBehaviour
         {           
             string dataAsJSON = itemListJSON.text;            
             listOfItems = JsonUtility.FromJson<ItemList>("{\"items\":" + dataAsJSON + "}");
+            /*
             foreach (var item in listOfItems.items)
             {
                 item.printItem();
             }
-            //print(listOfItems["0"]);               
-          
-            //print(listOfItems[0]);
+            */
         }
         else
         {
@@ -110,7 +149,6 @@ public class ItemShopMenu : MonoBehaviour
 [System.Serializable]
 public class ItemList
 {
-    
     public Item[] items;
 }
 
