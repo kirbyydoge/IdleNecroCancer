@@ -83,18 +83,20 @@ public class ItemShopMenu : MonoBehaviour
 
 
     [SerializeField]
-    private TextAsset itemListJSON = null;
+    private TextAsset itemListJSON;
 
     public void LoadShopMenuList()
     {
         if (itemListJSON != null)
-        {
-            print(itemListJSON);
-            string dataAsJSON = itemListJSON.text;
-            print(dataAsJSON);
-            listOfItems = JsonUtility.FromJson<ItemList>(dataAsJSON);
-            //print(listOfItems["0"]);
-            print(listOfItems);
+        {           
+            string dataAsJSON = itemListJSON.text;            
+            listOfItems = JsonUtility.FromJson<ItemList>("{\"items\":" + dataAsJSON + "}");
+            foreach (var item in listOfItems.items)
+            {
+                item.printItem();
+            }
+            //print(listOfItems["0"]);               
+          
             //print(listOfItems[0]);
         }
         else
@@ -105,20 +107,38 @@ public class ItemShopMenu : MonoBehaviour
 
 }
 
+[System.Serializable]
 public class ItemList
 {
-    public int id;
+    
     public Item[] items;
 }
 
+[System.Serializable]
 public class Item
 {
-    private string name;
-    private string category;
-    private string type;
-    private string bodySlot;
-    private string rarity;
-    private int price;
-    private string icon;
-    private string description;
+    public int id;
+    public string name;
+    public string category;
+    public string type;
+    public string bodySlot;
+    public string rarity;
+    public int price;
+    public string icon;
+    public string description;
+
+    public void printItem()
+    {
+        Debug.Log(
+            id + "\n" +
+            name + "\n" +
+            category + "\n" +
+            type + "\n" +
+            bodySlot + "\n" +
+            rarity + "\n" +
+            price + "\n" +
+            icon + "\n" +
+            description + "\n"
+            );
+    }
 }
